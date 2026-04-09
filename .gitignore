@@ -1,0 +1,8 @@
+/.venv/
+/project/__pycache__/
+/project/scripts/__pycache__/
+uv.lock
+*.Identifier
+test.egg-info
+/project/*.Identifier
+/project/scripts/*.Identifier
