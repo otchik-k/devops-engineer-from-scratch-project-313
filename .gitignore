@@ -6,3 +6,4 @@ uv.lock
 test.egg-info
 /project/*.Identifier
 /project/scripts/*.Identifier
+/.github/workflows/
