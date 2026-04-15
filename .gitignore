@@ -7,3 +7,4 @@ test.egg-info
 /project/*.Identifier
 /project/scripts/*.Identifier
 /.github/workflows/
+/tests/__pycache__/
