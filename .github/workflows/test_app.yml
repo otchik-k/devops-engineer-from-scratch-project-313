@@ -9,7 +9,6 @@ on:
  env:
   BADGE_NAME: tests_app
 
-
 jobs:
   test:
     runs-on: ubuntu-latest
