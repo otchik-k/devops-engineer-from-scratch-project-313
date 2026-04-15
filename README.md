@@ -1,6 +1,7 @@
 ### Hexlet tests and linter status:
 [![Actions Status](https://github.com/otchik-k/devops-engineer-from-scratch-project-313/actions/workflows/hexlet-check.yml/badge.svg)](https://github.com/otchik-k/devops-engineer-from-scratch-project-313/actions)
 [![Tests Ruff____](https://github.com/otchik-k/devops-engineer-from-scratch-project-313/actions/workflows/lint.yml/badge.svg)](https://github.com/otchik-k/devops-engineer-from-scratch-project-313/actions)
+[![Tests App_____](https://github.com/otchik-k/devops-engineer-from-scratch-project-313/actions/workflows/test_app.yml/badge.svg)](https://github.com/otchik-k/devops-engineer-from-scratch-project-313/actions)
 
 
 Данный набор кода на Python представляет собой реализацию учебного проекта **"Деплой приложения на PaaS"** курса **"DevOps-инженер с нуля"** на Hexlet<br>
