@@ -7,11 +7,8 @@ on:
     branches: [main]
     
  env:
-  BADGE_NAME: tests
+  BADGE_NAME: tests_app
 
-jobs:
-  test:
-    runs-on: ubuntu-latest
 
 jobs:
   test:
