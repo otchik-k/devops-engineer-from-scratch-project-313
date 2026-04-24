@@ -6,6 +6,7 @@ COPY requirements.txt /app
 
 RUN --mount=type=cache,target=/root/.cache/pip \
     pip3 install -r requirements.txt
+
 COPY . /app
 
 RUN uv sync
@@ -24,4 +25,5 @@ RUN <<EOF
 addgroup -S docker
 adduser -S --shell /bin/bash --ingroup docker vscode
 EOF
+
 COPY --from=gloursdocker/docker / /

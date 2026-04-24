@@ -1,7 +1,7 @@
-services:
-  web:
+services: 
+  web: 
     build:
-     context: .
+     context: app
      target: builder
-    ports:
+    ports: 
       - '8080:8080'
