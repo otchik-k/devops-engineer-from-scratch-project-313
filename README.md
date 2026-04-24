@@ -13,4 +13,5 @@ The project uses Python dthcbb 3.12 and the Flask framework<br>
 
 Для запуска проекта используйте команду:<br>
 To launch the project, use the command:<br>
-	make run
+	make run<br>
+ссылка на развернутое приложение https://devops-engineer-from-scratch-project-313-o07t.onrender.com/ping
