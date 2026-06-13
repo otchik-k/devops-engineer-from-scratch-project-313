@@ -8,6 +8,7 @@ on:
 
 env:
   BADGE_NAME: tests_app
+  DATABASE_URL: postgresql://hexlet:12345@localhost:5432/stud_db
 
 jobs:
   test:
