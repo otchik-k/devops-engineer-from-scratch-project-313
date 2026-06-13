@@ -17,10 +17,10 @@ CMD ["python3", "application/main.py"]
 
 FROM builder AS dev-envs
 
-RUN apk update && apk add --no-cache git docker-cli
+#RUN apk update && apk add --no-cache git docker-cli
 
-RUN addgroup -S docker && \
-    adduser -S vscode -G docker -s /bin/bash && \
-    chown -R vscode:docker /app
+#RUN addgroup -S docker && \
+#    adduser -S vscode -G docker -s /bin/bash && \
+#    chown -R vscode:docker /app
 
-USER vscode
+#USER vscode
