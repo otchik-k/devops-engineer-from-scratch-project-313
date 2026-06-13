@@ -28,6 +28,7 @@ jobs:
           pip install pytest
           pip install Flask
           pip install psycopg2
+          pip install sqlmodel
 
       - name: Run pytest
         run: pytest
