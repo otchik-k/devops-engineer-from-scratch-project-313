@@ -4,6 +4,7 @@ WORKDIR /app
 
 COPY requirements.txt /app
 
+#RUN pip3 install --no-cache-dir uv
 RUN --mount=type=cache,target=/root/.cache/pip \
     pip3 install -r requirements.txt
 
@@ -16,14 +17,10 @@ CMD ["python3", "application/main.py"]
 
 FROM builder AS dev-envs
 
-RUN <<EOF
-apk update
-apk add git
-EOF
+RUN apk update && apk add --no-cache git docker-cli
 
-RUN <<EOF
-addgroup -S docker
-adduser -S --shell /bin/bash --ingroup docker vscode
-EOF
+RUN addgroup -S docker && \
+    adduser -S vscode -G docker -s /bin/bash && \
+    chown -R vscode:docker /app
 
-COPY --from=gloursdocker/docker / /
+USER vscode

@@ -1,4 +1,1 @@
-flask
 uv
-SQLModel
-psycopg2-binary
