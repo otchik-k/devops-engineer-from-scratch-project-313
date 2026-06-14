@@ -18,3 +18,6 @@
 
 Для запуска проекта используйте команду:<br>
 	make run<br>
+
+Ссылка на проект в Render:<br> 
+https://devops-engineer-from-scratch-project-313-r3fr.onrender.com
