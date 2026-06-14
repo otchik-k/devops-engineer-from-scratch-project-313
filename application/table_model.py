@@ -2,8 +2,6 @@ import os
 
 from sqlmodel import Field, SQLModel, create_engine
 
-#from config import DATABASE_URL
-
 from datetime import datetime
 
 

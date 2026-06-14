@@ -4,8 +4,6 @@ import signal
 
 import sys
 
-#from config import DATABASE_URL
-
 from links_repository import LinksRepository
 
 from table_model import create_tables
@@ -24,7 +22,6 @@ def create_app():
     app = Flask(__name__)
     
     print('Инициализация приложения')
-    #os.environ['DATABASE_URL'] = "postgresql://hexlet:12345@localhost:5432/stud_db"
     db_connect = os.environ['DATABASE_URL']
     conn = psycopg2.connect(db_connect)
     repo = LinksRepository(conn)

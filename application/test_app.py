@@ -87,7 +87,7 @@ def test_delete_link_for_id(client):
     c, mock_repo = client
     
     response = c.delete('/api/links/1')
-    assert response.status_code == 204 # No Content
+    assert response.status_code == 204
     mock_repo.delete_link_for_id.assert_called_once_with('1')
 
 def test_not_found(client):
