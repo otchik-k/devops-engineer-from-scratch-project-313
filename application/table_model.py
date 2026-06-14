@@ -1,11 +1,14 @@
+import os
+
 from sqlmodel import Field, SQLModel, create_engine
 
-from config import DATABASE_URL
+#from config import DATABASE_URL
 
 from datetime import datetime
 
 
-engine = create_engine(DATABASE_URL, echo=False)
+db_connect = os.environ['DATABASE_URL']
+engine = create_engine(db_connect, echo=False)
 
 
 class Links(SQLModel, table=True):
