@@ -34,9 +34,22 @@ class LinksRepository:
 
     def select_all_links(self):
         try:
-            sql_select = 'SELECT id, original_url, short_name, short_url FROM links'
+            query_select = 'SELECT id, original_url, short_name, short_url FROM links'
             with self.conn.cursor(cursor_factory=RealDictCursor) as cur:
-                cur.execute(sql_select)
+                cur.execute(query_select)
+                return cur.fetchall()
+        except Exception as e:
+            self.conn.rollback()
+            print(f"Транзакция отменена из‑за ошибки: {e}")
+
+
+    def select_links_from_range(self, range):
+        offset = range[0]
+        limit = range[1] - range[0] + 1
+        try:
+            query_select = 'SELECT id, original_url, short_name, short_url FROM links ORDER BY id LIMIT %s OFFSET %s;'
+            with self.conn.cursor(cursor_factory=RealDictCursor) as cur:
+                cur.execute(query_select, limit, offset)
                 return cur.fetchall()
         except Exception as e:
             self.conn.rollback()

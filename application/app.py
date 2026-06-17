@@ -40,6 +40,34 @@ def create_app():
     
     signal.signal(signal.SIGTERM, signal_handler)
     signal.signal(signal.SIGINT, signal_handler)
+
+
+    def parse_range_param(range_str):
+        if not range_str:
+            return None
+
+        cleaned = range_str.strip().strip('[]')
+
+        if ',' in cleaned:
+            parts = cleaned.split(',')
+        elif ':' in cleaned:
+            parts = cleaned.split(':')
+        else:
+            return None
+
+        if len(parts) != 2:
+            return None
+
+        try:
+            start = int(parts[0].strip())
+            end = int(parts[1].strip())
+
+            if start < 0 or end < 0 or start > end:
+                return None
+
+            return start, end
+        except ValueError:
+            return None
     
     
     @app.teardown_appcontext
@@ -59,10 +87,18 @@ def create_app():
 
     @app.route('/api/links', methods=['GET'])
     def get_links():
-        raw_data = repo.select_all_links()
+        range_param = request.args.get('range')
+        range_values = parse_range_param(range_param)
+
+        if range_values is None:
+            raw_data = repo.select_all_links()
+        else:
+            raw_data = repo.select_links_from_range(range_values)
+            
         links = [dict(row) for row in raw_data] 
         return jsonify({"status": "success", "data": links}), 200
 
+    
 
     @app.route('/api/links', methods=['POST'])
     def post_links():
