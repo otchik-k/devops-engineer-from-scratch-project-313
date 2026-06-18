@@ -30,7 +30,21 @@ class LinksRepository:
         except Exception as e:
             self.conn.rollback()
             print(f"Транзакция отменена из‑за ошибки: {e}")
+    
 
+    def get_total_links_count(self):
+        try:
+            query_select = 'SELECT COUNT(*) FROM links;'
+            with self.conn.cursor(cursor_factory=RealDictCursor) as cur:
+                cur.execute(query_select)
+                result = cur.fetchone()
+                print(result)
+                return result['count'] if result else 0
+        except Exception as e:
+            self.conn.rollback()
+            print(f"Транзакция отменена из‑за ошибки: {e}")
+            return 0
+            
 
     def select_all_links(self):
         try:
@@ -49,11 +63,12 @@ class LinksRepository:
         try:
             query_select = 'SELECT id, original_url, short_name, short_url FROM links ORDER BY id LIMIT %s OFFSET %s;'
             with self.conn.cursor(cursor_factory=RealDictCursor) as cur:
-                cur.execute(query_select, limit, offset)
+                cur.execute(query_select, (limit, offset))
                 return cur.fetchall()
         except Exception as e:
             self.conn.rollback()
             print(f"Транзакция отменена из‑за ошибки: {e}")
+            return 0
     
     
     def select_link_for_id(self, id_value):

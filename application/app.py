@@ -45,7 +45,7 @@ def create_app():
     def parse_range_param(range_str):
         if not range_str:
             return None
-
+        
         cleaned = range_str.strip().strip('[]')
 
         if ',' in cleaned:
@@ -64,7 +64,7 @@ def create_app():
 
             if start < 0 or end < 0 or start > end:
                 return None
-
+            
             return start, end
         except ValueError:
             return None
@@ -89,17 +89,29 @@ def create_app():
     def get_links():
         range_param = request.args.get('range')
         range_values = parse_range_param(range_param)
+        total_count = repo.get_total_links_count()
+        print('total_count')
+        print(total_count)
 
         if range_values is None:
             raw_data = repo.select_all_links()
+            start = 0
+            end = total_count - 1
         else:
-            raw_data = repo.select_links_from_range(range_values)
-            
-        links = [dict(row) for row in raw_data] 
-        return jsonify({"status": "success", "data": links}), 200
+            start, end_requested = range_values
+            end = min(end_requested, total_count - 1)
+            raw_data = repo.select_links_from_range((start, end))
+
+        links = [dict(row) for row in raw_data]
+        content_range = f"links {start}-{end}/{total_count}"
+        response = jsonify({
+            "status": "success",
+            "data": links
+        })
+        response.headers['Content-Range'] = content_range
+        return response, 200
 
     
-
     @app.route('/api/links', methods=['POST'])
     def post_links():
         if not request.is_json:

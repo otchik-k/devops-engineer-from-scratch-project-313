@@ -63,3 +63,38 @@ def test_delete_link_for_id(mock_db):
         (5,)
     )
     conn.commit.assert_called_once()
+
+
+def test_get_total_links_count(mock_db):
+    conn, cursor = mock_db
+    cursor.fetchone.return_value = {'count': 42}
+    
+    repo = LinksRepository(conn)
+    result = repo.get_total_links_count()
+    
+    assert result == 42
+    cursor.execute.assert_called_once_with('SELECT COUNT(*) FROM links;')
+
+def test_get_total_links_count_empty(mock_db):
+    conn, cursor = mock_db
+    cursor.fetchone.return_value = None 
+    
+    repo = LinksRepository(conn)
+    result = repo.get_total_links_count()
+    
+    assert result == 0
+
+def test_select_links_from_range(mock_db):
+    conn, cursor = mock_db
+    expected_data = [{'id': 6, 'original_url': 'http://f.com', 'short_name': 'f', 'short_url': '...'}]
+    cursor.fetchall.return_value = expected_data
+    
+    repo = LinksRepository(conn)
+    result = repo.select_links_from_range((5, 14))
+    
+    assert result == expected_data
+    
+    cursor.execute.assert_called_once_with(
+        'SELECT id, original_url, short_name, short_url FROM links ORDER BY id LIMIT %s OFFSET %s;',
+        (10, 5)
+    )
