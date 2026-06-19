@@ -90,8 +90,6 @@ def create_app():
         range_param = request.args.get('range')
         range_values = parse_range_param(range_param)
         total_count = repo.get_total_links_count()
-        print('total_count')
-        print(total_count)
 
         if range_values is None:
             raw_data = repo.select_all_links()
