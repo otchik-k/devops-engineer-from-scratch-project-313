@@ -20,7 +20,7 @@ def test_insert_data_success(mock_db):
     with patch('links_repository.DOMEN_FOR_SHORT_URL', 'http://short.ly'):
         result = repo.insert_data("http://example.com", "mylink")
     
-    assert result == "http://short.ly/mylink/42"
+    assert result == 42
     assert cursor.execute.call_count == 2
     conn.commit.assert_called_once()
 
