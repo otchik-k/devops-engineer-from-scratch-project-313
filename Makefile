@@ -1,3 +1,10 @@
+go:
+	nginx
+	uv run application/main.py
+
+start:
+	npx concurrently 'npx start-hexlet-devops-deploy-crud-frontend' 'make run'
+
 run:
 	uv run application/main.py
 

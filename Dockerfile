@@ -8,14 +8,34 @@ COPY requirements.txt /app
 RUN --mount=type=cache,target=/root/.cache/pip \
     pip3 install -r requirements.txt
 
-COPY . /app
+RUN apk update && apk add nginx
+
+COPY ./application /app
+COPY ./services/project-devops-deploy-crud-frontend/dist/. /app/publ
+COPY ./services/nginx.conf /etc/nginx
 
 RUN uv sync
 
-ENTRYPOINT ["uv", "run"]
-CMD ["python3", "application/main.py"]
+RUN cat > /start.sh << 'EOF'
+#!/usr/bin/env bash
+set -e
 
-FROM builder AS dev-envs
+nginx
+
+exec gunicorn --bind 0.0.0.0:5000 main:app
+EOF
+RUN chmod +x /start.sh
+
+# Открываем порт, который слушает Nginx (80)
+EXPOSE 80
+
+# Точка входа: запускаем оба сервиса
+CMD ["/start.sh"]
+
+#ENTRYPOINT ["uv", "run"]
+#CMD ["python3", "application/main.py"]
+
+#FROM builder AS dev-envs
 
 #RUN apk update && apk add --no-cache git docker-cli
 

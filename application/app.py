@@ -8,6 +8,8 @@ from links_repository import LinksRepository
 
 from table_model import create_tables
 
+from flask_cors import CORS
+
 import psycopg2
 
 
@@ -20,6 +22,8 @@ from flask import (
 
 def create_app():
     app = Flask(__name__)
+
+    CORS(app, resources={r"/api/*": {"origins": "http://localhost:5173"}})
     
     print('Инициализация приложения')
     db_connect = os.environ['DATABASE_URL']
@@ -102,10 +106,7 @@ def create_app():
 
         links = [dict(row) for row in raw_data]
         content_range = f"links {start}-{end}/{total_count}"
-        response = jsonify({
-            "status": "success",
-            "data": links
-        })
+        response = jsonify(links)
         response.headers['Content-Range'] = content_range
         return response, 200
 
@@ -126,17 +127,15 @@ def create_app():
         if not original_url or not short_name:
             return jsonify({"error": "Поля 'short_name' и 'original_url' обязательны"}), 422
         
-        print(f'original_url={original_url}')
-        print(f'short_name={short_name}')
         result = repo.insert_data(original_url, short_name)
-        return jsonify({"status": "success", "short_url": result}), 201
+        return jsonify({"id": result}), 201
 
 
     @app.route('/api/links/<id>', methods=['GET'])
     def get_link_for_id(id):
         raw_data = repo.select_link_for_id(id)
-        link = [dict(row) for row in raw_data]
-        return jsonify({"status": "success", "data": link}), 200
+        #link = [dict(row) for row in raw_data]
+        return jsonify(raw_data), 200
 
 
     @app.route('/api/links/<id>', methods=['PUT'])
@@ -156,8 +155,7 @@ def create_app():
         
         repo.update_link_for_id(id, original_url, short_name)
         raw_data = repo.select_link_for_id(id)
-        link = [dict(row) for row in raw_data]
-        return jsonify({"status": "success", "data": link}), 200
+        return jsonify(raw_data), 200
         
 
     @app.route('/api/links/<id>', methods=['DELETE'])

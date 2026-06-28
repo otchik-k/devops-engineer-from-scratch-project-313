@@ -11,3 +11,4 @@ wheels/
 # Virtual environments
 .venv
 uv.lock
+node_modules

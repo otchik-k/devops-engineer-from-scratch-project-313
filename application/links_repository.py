@@ -26,7 +26,7 @@ class LinksRepository:
                     """
                 cur.execute(query_update, (short_url, id_value))
                 self.conn.commit()
-            return short_url
+            return id_value
         except Exception as e:
             self.conn.rollback()
             print(f"Транзакция отменена из‑за ошибки: {e}")
@@ -80,7 +80,7 @@ class LinksRepository:
             """
             with self.conn.cursor(cursor_factory=RealDictCursor) as cur:
                 cur.execute(query_select, (id_value,))
-                return cur.fetchall()
+                return cur.fetchone()
         except Exception as e:
             self.conn.rollback()
             print(f"Транзакция отменена из‑за ошибки: {e}")
