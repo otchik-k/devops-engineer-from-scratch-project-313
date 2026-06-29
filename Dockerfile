@@ -9,6 +9,7 @@ RUN --mount=type=cache,target=/root/.cache/pip \
     pip3 install -r requirements.txt
 
 RUN apk update && apk add nginx
+RUN apk add --no-cache bash
 
 #COPY ./application /app
 COPY . /app
