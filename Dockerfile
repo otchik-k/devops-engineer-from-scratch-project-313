@@ -10,7 +10,8 @@ RUN --mount=type=cache,target=/root/.cache/pip \
 
 RUN apk update && apk add nginx
 
-COPY ./application /app
+#COPY ./application /app
+COPY . /app
 COPY ./services/project-devops-deploy-crud-frontend/dist/. /app/publ
 COPY ./services/nginx.conf /etc/nginx
 
