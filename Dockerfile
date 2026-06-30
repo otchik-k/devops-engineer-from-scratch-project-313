@@ -12,7 +12,7 @@ RUN apk update && apk add nginx
 RUN apk add --no-cache bash
 #RUN apk add --no-cache gunicorn
 
-#COPY ./application /app
+#COPY ./application/ /app
 COPY . /app
 COPY ./services/project-devops-deploy-crud-frontend/dist/. /app/publ
 COPY ./services/nginx.conf /etc/nginx
