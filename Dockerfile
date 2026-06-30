@@ -25,7 +25,9 @@ set -e
 
 nginx
 
-exec gunicorn --bind 0.0.0.0:5000 application.main:app
+cd /app/application
+
+exec gunicorn --bind 0.0.0.0:5000 main:app
 EOF
 RUN chmod +x /start.sh
 
