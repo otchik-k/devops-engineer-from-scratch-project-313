@@ -1,4 +1,4 @@
 uv
-libpq
+#libpq
 #gunicorn
 #psycopg2-binary

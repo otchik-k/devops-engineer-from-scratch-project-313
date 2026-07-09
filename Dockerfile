@@ -10,7 +10,10 @@ RUN --mount=type=cache,target=/root/.cache/pip \
 
 RUN apk update && apk add nginx
 RUN apk add --no-cache bash
-#RUN apk add --no-cache gunicorn
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential \
+    libpq-dev \
+    && rm -rf /var/lib/apt/lists/*n
 
 COPY ./application/. /app
 COPY . /app
