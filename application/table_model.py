@@ -4,8 +4,11 @@ from sqlmodel import Field, SQLModel, create_engine
 
 from datetime import datetime
 
-
-db_connect = os.environ['DATABASE_URL']
+DATABASE_URL = os.environ['DATABASE_URL']
+if DATABASE_URL.startswith("postgres://"):
+    DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql+psycopg://")
+#db_connect = os.environ[DATABASE_URL]
+db_connect = DATABASE_URL
 engine = create_engine(db_connect, echo=False)
 
 

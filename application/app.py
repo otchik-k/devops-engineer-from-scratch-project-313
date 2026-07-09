@@ -26,7 +26,11 @@ def create_app():
     CORS(app, resources={r"/api/*": {"origins": "http://localhost:5173"}})
     
     print('Инициализация приложения')
-    db_connect = os.environ['DATABASE_URL']
+    DATABASE_URL = os.environ['DATABASE_URL']
+    if DATABASE_URL.startswith("postgres://"):
+        DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql+psycopg://")
+    #db_connect = os.environ[DATABASE_URL]
+    db_connect = DATABASE_URL
     conn = psycopg2.connect(db_connect)
     repo = LinksRepository(conn)
     create_tables()
