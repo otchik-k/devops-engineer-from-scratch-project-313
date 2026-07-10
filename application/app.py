@@ -131,7 +131,7 @@ def create_app():
             return jsonify({"error": "Поля 'short_name' и 'original_url' обязательны"}), 422
         
         result = repo.insert_data(original_url, short_name)
-        return jsonify({"id": result}), 201
+        return jsonify(result), 201
 
 
     @app.route('/api/links/<id>', methods=['GET'])
