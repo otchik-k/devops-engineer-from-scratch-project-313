@@ -28,10 +28,9 @@ def create_app():
     print('Инициализация приложения')
     DATABASE_URL = os.environ['DATABASE_URL']
     if DATABASE_URL.startswith("postgres://"):
-        DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql+psycopg://")
+        DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql://")
     #db_connect = os.environ[DATABASE_URL]
-    db_connect = DATABASE_URL
-    conn = psycopg2.connect(db_connect)
+    conn = psycopg2.connect(DATABASE_URL)
     repo = LinksRepository(conn)
     create_tables()
     

@@ -6,10 +6,9 @@ from datetime import datetime
 
 DATABASE_URL = os.environ['DATABASE_URL']
 if DATABASE_URL.startswith("postgres://"):
-    DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql+psycopg://")
+    DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql://")
 #db_connect = os.environ[DATABASE_URL]
-db_connect = DATABASE_URL
-engine = create_engine(db_connect, echo=False)
+engine = create_engine(DATABASE_URL, echo=False)
 
 
 class Links(SQLModel, table=True):
