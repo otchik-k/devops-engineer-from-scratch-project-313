@@ -24,7 +24,12 @@ class LinksRepository:
                 """
                 cur.execute(query_update, (short_url, id_value))
                 self.conn.commit()
-            return {'original_url': original_url, 'short_name': short_name}
+            return {
+                    'id': id_value,
+                    'original_url': original_url,
+                    'short_name': short_name,
+                    'short_url': short_url
+                }
         except Exception as e:
             self.conn.rollback()
             print(f"Транзакция отменена из‑за ошибки: {e}")

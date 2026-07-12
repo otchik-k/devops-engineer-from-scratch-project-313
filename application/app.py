@@ -135,7 +135,7 @@ def create_app():
             return jsonify({"detail": "Некорректный ID"}), 400
 
         if not request.is_json:
-            return jsonify({"detail": "Требуется Content-Type: application/json"}), 415
+            return jsonify({"detail": {"error": "Требуется Content-Type: application/json"}}), 422
 
         data = request.get_json(silent=True)
         if not isinstance(data, dict):
@@ -146,8 +146,8 @@ def create_app():
 
         if not original_url or not short_name:
             return jsonify({
-                "detail": "Поля 'original_url' и 'short_name' обязательны"
-            }), 422
+            "detail": {"error": "Поля 'original_url' и 'short_name' обязательны"}
+        }), 422
 
         link_id = int(id)
         # сначала проверим, существует ли запись
