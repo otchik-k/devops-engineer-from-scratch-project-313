@@ -136,8 +136,6 @@ def create_app():
 
     @app.route('/api/links/<id>', methods=['GET'])
     def get_link_for_id(id):
-        if (id == 'undefined'):
-            return jsonify({"id": 'undefined', "original_url": 'undefined', "short_name": 'undefined'}), 200
         raw_data = repo.select_link_for_id(id)
         #link = [dict(row) for row in raw_data]
         return jsonify(raw_data), 200
