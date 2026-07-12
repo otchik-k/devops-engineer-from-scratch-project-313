@@ -11,18 +11,24 @@ class LinksRepository:
             query_insert = """
                 INSERT INTO links (original_url, short_name) 
                 VALUES (%s, %s) 
-                RETURNING id, original_url, short_name, short_url;
+                RETURNING id;
             """
             with self.conn.cursor(cursor_factory=RealDictCursor) as cur:
                 cur.execute(query_insert, (original_url, short_name))
-                row = cur.fetchone()
+                id_value = cur.fetchone()['id']
+                short_url = f"{DOMEN_FOR_SHORT_URL}/{short_name}/{id_value}"
+                query_update = """
+                    UPDATE links 
+                    SET short_url = %s 
+                    WHERE id = %s;
+                """
+                cur.execute(query_update, (short_url, id_value))
                 self.conn.commit()
-                return dict(row)
+            return {'original_url': original_url, 'short_name': short_name}
         except Exception as e:
             self.conn.rollback()
             print(f"Транзакция отменена из‑за ошибки: {e}")
             return None
-
 
     def get_total_links_count(self) -> int:
         try:
