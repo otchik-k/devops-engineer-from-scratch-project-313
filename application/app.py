@@ -97,35 +97,36 @@ def create_app():
     @app.route('/api/links', methods=['POST'])
     def post_links():
         if not request.is_json:
-            return jsonify({"error": "Требуется Content-Type: application/json"}), 415
+            return jsonify({"detail": "Требуется Content-Type: application/json"}), 415
 
         data = request.get_json(silent=True)
         if not isinstance(data, dict):
-            return jsonify({"error": "Некорректный JSON-формат"}), 400
+            return jsonify({"detail": "Некорректный JSON-формат"}), 400
 
         original_url = data.get('original_url')
         short_name = data.get('short_name')
 
         if not original_url or not short_name:
             return jsonify({
-                "error": "Поля 'short_name' и 'original_url' обязательны"
+                "detail": "Поля 'short_name' и 'original_url' обязательны"
             }), 422
 
         result = repo.insert_data(original_url, short_name)
         if result is None:
-            # ошибка в репозитории (транзакция откатилась)
-            return jsonify({"error": "Ошибка при сохранении ссылки"}), 500
+            return jsonify({"detail": "Ошибка при сохранении ссылки"}), 500
         return jsonify(result), 201
+
 
     @app.route('/api/links/<id>', methods=['GET'])
     def get_link_for_id(id: str):
-        # валидация ID
-        if not id.isdigit():
-            return jsonify({"error": "Некорректный ID"}), 400
+        try:
+            link_id = int(id)
+        except (ValueError, TypeError):
+            return jsonify({"detail": "Некорректный ID"}), 400
 
-        link = repo.select_link_for_id(int(id))
+        link = repo.select_link_for_id(link_id)
         if link is None:
-            return jsonify({"error": "Ссылка не найдена"}), 404
+            return jsonify({"detail": "Ссылка не найдена"}), 404
         return jsonify(link), 200
 
     @app.route('/api/links/<id>', methods=['PUT'])
