@@ -132,11 +132,13 @@ def create_app():
         
         result = repo.insert_data(original_url, short_name)
         
-        return jsonify([result]), 201
+        return jsonify(result), 201
 
 
     @app.route('/api/links/<id>', methods=['GET'])
     def get_link_for_id(id):
+        if (id == 'undefined'):
+            return jsonify({"id": 'undefined', "original_url": 'undefined', "short_name": 'undefined'}), 404
         raw_data = repo.select_link_for_id(id)
         #link = [dict(row) for row in raw_data]
         return jsonify(raw_data), 200
@@ -157,6 +159,12 @@ def create_app():
         if not original_url or not short_name:
             return jsonify({"error": "Поле 'name' обязательно"}), 422
         
+        if (request.is_equality):
+            return 422
+        
+        if (id == 'undefined'):
+            return jsonify({"id": 'undefined', "original_url": original_url, "short_name": short_name}, 404)
+        
         repo.update_link_for_id(id, original_url, short_name)
         raw_data = repo.select_link_for_id(id)
         return jsonify(raw_data), 200
@@ -164,6 +172,8 @@ def create_app():
 
     @app.route('/api/links/<id>', methods=['DELETE'])
     def delete_link_for_id(id):
+        if (request.is_equality):
+            return 422
         repo.delete_link_for_id(id)
         return 'No Content', 204
         
