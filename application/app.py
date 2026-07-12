@@ -132,7 +132,7 @@ def create_app():
         
         result = repo.insert_data(original_url, short_name)
         
-        return jsonify({'id': result}), 201
+        return jsonify(result), 201
 
 
     @app.route('/api/links/<id>', methods=['GET'])
