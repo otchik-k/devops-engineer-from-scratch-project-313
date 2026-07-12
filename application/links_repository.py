@@ -1,4 +1,5 @@
 from psycopg2.extras import RealDictCursor
+
 from config import DOMEN_FOR_SHORT_URL
 
 

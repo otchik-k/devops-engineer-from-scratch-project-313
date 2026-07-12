@@ -1,11 +1,17 @@
 import os
+
 import signal
+
 import sys
+
 from typing import Any, Optional
 
 from links_repository import LinksRepository
+
 from table_model import create_tables
+
 from flask_cors import CORS
+
 import psycopg2
 
 from flask import Flask, request, jsonify
@@ -139,7 +145,7 @@ def create_app():
 
         data = request.get_json(silent=True)
         if not isinstance(data, dict):
-            return jsonify({"detail": "Некорректный JSON-формат"}), 400
+            return jsonify({"detail": "Некорректный JSON-формат"}), 422
 
         original_url = data.get('original_url')
         short_name = data.get('short_name')
