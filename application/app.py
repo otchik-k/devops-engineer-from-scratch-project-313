@@ -107,7 +107,7 @@ def create_app():
 
         data = request.get_json(silent=True)
         if not isinstance(data, dict):
-            return jsonify({"detail": "Некорректный JSON-формат"}), 400
+            return jsonify({"detail": Any<Object>,}), 400
 
         original_url = data.get('original_url')
         short_name = data.get('short_name')
@@ -145,7 +145,7 @@ def create_app():
 
         data = request.get_json(silent=True)
         if not isinstance(data, dict):
-            return jsonify({"detail": "Некорректный JSON-формат"}), 422
+            return jsonify({"detail": {"error": "Некорректный JSON-формат"}}), 422
 
         original_url = data.get('original_url')
         short_name = data.get('short_name')
