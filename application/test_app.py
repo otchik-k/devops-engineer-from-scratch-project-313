@@ -35,6 +35,8 @@ def test_get_links(client):
         {'id': 1, 'original_url': 'http://google.com', 'short_name': 'gl', 'short_url': 'http://s/gl/1'}
     ]
     
+    mock_repo.get_total_links_count.return_value = 1 
+
     response = c.get('/api/links')
     assert response.status_code == 200
     assert response.json[0]['short_name'] == 'gl'
@@ -61,14 +63,14 @@ def test_post_links_missing_fields(client):
     
     response = c.post('/api/links', json=payload)
     assert response.status_code == 422
-    assert "обязательны" in response.json['error']
+    assert "обязательны" in response.json['detail']
 
 
 def test_post_links_invalid_json(client):
     c, _ = client
     response = c.post('/api/links', data="not a json")
     assert response.status_code == 415
-    assert "Content-Type" in response.json['error']
+    assert "Content-Type" in response.json['detail']
 
 
 def test_put_link_for_id(client):
@@ -85,7 +87,7 @@ def test_put_link_for_id(client):
     response = c.put('/api/links/1', json=payload)
     assert response.status_code == 200
     assert response.json[0]['short_name'] == 'new'
-    mock_repo.update_link_for_id.assert_called_once_with('1', 'http://new.com', 'new')
+    mock_repo.update_link_for_id.assert_called_once_with(1, 'http://new.com', 'new')
 
 
 def test_delete_link_for_id(client):
@@ -93,14 +95,14 @@ def test_delete_link_for_id(client):
     
     response = c.delete('/api/links/1')
     assert response.status_code == 204
-    mock_repo.delete_link_for_id.assert_called_once_with('1')
+    mock_repo.delete_link_for_id.assert_called_once_with(1)
 
 
 def test_not_found(client):
     c, _ = client
     response = c.get('/nonexistent_route')
     assert response.status_code == 404
-    assert response.data == b"Oops! Error 404"
+    assert response.json == {"detail": "Ресурс не найден"}
 
 
 def test_get_links_without_range(client):

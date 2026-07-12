@@ -63,12 +63,7 @@ class LinksRepository:
         offset = range_tuple[0]
         limit = range_tuple[1] - range_tuple[0] + 1
         try:
-            query_select = '''
-                SELECT id, original_url, short_name, short_url
-                FROM links
-                ORDER BY id
-                LIMIT %s OFFSET %s;
-            '''
+            query_select = 'SELECT id, original_url, short_name, short_url FROM links ORDER BY id LIMIT %s OFFSET %s;'
             with self.conn.cursor(cursor_factory=RealDictCursor) as cur:
                 cur.execute(query_select, (limit, offset))
                 return cur.fetchall()

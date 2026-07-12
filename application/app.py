@@ -4,7 +4,7 @@ import signal
 
 import sys
 
-from typing import Any, Optional
+from typing import Optional
 
 from links_repository import LinksRepository
 

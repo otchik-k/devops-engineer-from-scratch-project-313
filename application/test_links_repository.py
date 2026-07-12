@@ -14,13 +14,13 @@ def mock_db():
 def test_insert_data_success(mock_db):
     conn, cursor = mock_db
     # Имитируем ответ от RETURNING id
-    cursor.fetchone.return_value = {'id': 42}
+    cursor.fetchone.return_value = {'id': 42, 'original_url': 'http://example.com', 'short_name': 'mylink', 'short_url': 'http://short.ly/mylink/42'}
     
     repo = LinksRepository(conn)
     with patch('links_repository.DOMEN_FOR_SHORT_URL', 'http://short.ly'):
         result = repo.insert_data("http://example.com", "mylink")
     
-    assert result == 42
+    assert result == {'id': 42, 'original_url': 'http://example.com', 'short_name': 'mylink', 'short_url': 'http://short.ly/mylink/42'}
     assert cursor.execute.call_count == 2
     conn.commit.assert_called_once()
 
