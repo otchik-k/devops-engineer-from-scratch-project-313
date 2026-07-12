@@ -95,7 +95,45 @@ def create_app():
         return response, 200
 
     @app.route('/api/links', methods=['POST'])
-    def post_links():
+def post_links():
+    if not request.is_json:
+        return jsonify({"detail": "Требуется Content-Type: application/json"}), 415
+
+    data = request.get_json(silent=True)
+    if not isinstance(data, dict):
+        return jsonify({"detail": "Некорректный JSON-формат"}), 400
+
+    original_url = data.get('original_url')
+    short_name = data.get('short_name')
+
+    if not original_url or not short_name:
+        return jsonify({
+            "detail": "Поля 'short_name' и 'original_url' обязательны"
+        }), 422
+
+    result = repo.insert_data(original_url, short_name)
+    if result is None:
+        return jsonify({"detail": "Ошибка при сохранении ссылки"}), 500
+    return jsonify(result), 201
+
+
+@app.route('/api/links/<id>', methods=['GET'])
+def get_link_for_id(id: str):
+    try:
+        link_id = int(id)
+    except (ValueError, TypeError):
+        return jsonify({"detail": "Некорректный ID"}), 400
+
+    link = repo.select_link_for_id(link_id)
+    if link is None:
+        return jsonify({"detail": "Ссылка не найдена"}), 404
+    return jsonify(link), 200
+
+    @app.route('/api/links/<id>', methods=['PUT'])
+    def put_link_for_id(id: str):
+        if not id.isdigit():
+            return jsonify({"detail": "Некорректный ID"}), 400
+
         if not request.is_json:
             return jsonify({"detail": "Требуется Content-Type: application/json"}), 415
 
@@ -108,75 +146,37 @@ def create_app():
 
         if not original_url or not short_name:
             return jsonify({
-                "detail": "Поля 'short_name' и 'original_url' обязательны"
-            }), 422
-
-        result = repo.insert_data(original_url, short_name)
-        if result is None:
-            return jsonify({"detail": "Ошибка при сохранении ссылки"}), 500
-        return jsonify(result), 201
-
-
-    @app.route('/api/links/<id>', methods=['GET'])
-    def get_link_for_id(id: str):
-        try:
-            link_id = int(id)
-        except (ValueError, TypeError):
-            return jsonify({"detail": "Некорректный ID"}), 400
-
-        link = repo.select_link_for_id(link_id)
-        if link is None:
-            return jsonify({"detail": "Ссылка не найдена"}), 404
-        return jsonify(link), 200
-
-    @app.route('/api/links/<id>', methods=['PUT'])
-    def put_link_for_id(id: str):
-        if not id.isdigit():
-            return jsonify({"error": "Некорректный ID"}), 400
-
-        if not request.is_json:
-            return jsonify({"error": "Требуется Content-Type: application/json"}), 415
-
-        data = request.get_json(silent=True)
-        if not isinstance(data, dict):
-            return jsonify({"error": "Некорректный JSON-формат"}), 400
-
-        original_url = data.get('original_url')
-        short_name = data.get('short_name')
-
-        if not original_url or not short_name:
-            return jsonify({
-                "error": "Поля 'original_url' и 'short_name' обязательны"
+                "detail": "Поля 'original_url' и 'short_name' обязательны"
             }), 422
 
         link_id = int(id)
         # сначала проверим, существует ли запись
         existing = repo.select_link_for_id(link_id)
         if existing is None:
-            return jsonify({"error": "Ссылка не найдена"}), 404
+            return jsonify({"detail": "Ссылка не найдена"}), 404
 
         repo.update_link_for_id(link_id, original_url, short_name)
         updated = repo.select_link_for_id(link_id)
         if updated is None:
-            return jsonify({"error": "Ошибка обновления"}), 500
+            return jsonify({"detail": "Ошибка обновления"}), 500
         return jsonify(updated), 200
 
     @app.route('/api/links/<id>', methods=['DELETE'])
     def delete_link_for_id(id: str):
         if not id.isdigit():
-            return jsonify({"error": "Некорректный ID"}), 400
+            return jsonify({"detail": "Некорректный ID"}), 400
 
         link_id = int(id)
         existing = repo.select_link_for_id(link_id)
         if existing is None:
-            return jsonify({"error": "Ссылка не найдена"}), 404
+            return jsonify({"detail": "Ссылка не найдена"}), 404
 
         repo.delete_link_for_id(link_id)
         return '', 204
 
     @app.errorhandler(404)
     def not_found(error):
-        return jsonify({"error": "Ресурс не найден"}), 404
+        return jsonify({"detail": "Ресурс не найден"}), 404
 
     return app
 
