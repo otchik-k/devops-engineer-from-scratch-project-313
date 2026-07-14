@@ -28,4 +28,4 @@
     make start<br>
 
 Ссылка на проект в Render:<br> 
-https://devops-engineer-from-scratch-project-313-r3fr.onrender.com/static/index.html#/links
+https://devops-engineer-from-scratch-project-313-cgbt.onrender.com/#/links

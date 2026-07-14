@@ -22,6 +22,7 @@ def client():
                     yield client, mock_repo
 
 
+
 def test_ping(client):
     c, _ = client
     response = c.get('/ping')

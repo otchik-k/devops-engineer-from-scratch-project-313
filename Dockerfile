@@ -6,7 +6,7 @@ COPY requirements.txt /app
 
 RUN pip3 install --no-cache-dir uv
 #RUN --mount=type=cache,target=/root/.cache/pip \
-    pip3 install -r requirements.txt
+#    pip3 install -r requirements.txt
 
 RUN apk update && apk add nginx
 RUN apk add --no-cache bash
