@@ -4,9 +4,9 @@ WORKDIR /app
 
 COPY requirements.txt /app
 
-RUN pip3 install --no-cache-dir uv
-#RUN --mount=type=cache,target=/root/.cache/pip \
-#    pip3 install -r requirements.txt
+#RUN pip3 install --no-cache-dir uv
+RUN --mount=type=cache,target=/root/.cache/pip \
+    pip3 install -r requirements.txt
 
 RUN apk update && apk add nginx
 RUN apk add --no-cache bash
@@ -41,7 +41,7 @@ RUN chmod +x start.sh
 EXPOSE 80
 
 # Точка входа: запускаем оба сервиса
-CMD ["start.sh"]
+CMD ["/start.sh"]
 
 #ENTRYPOINT ["uv", "run"]
 #CMD ["python3", "application/main.py"]
