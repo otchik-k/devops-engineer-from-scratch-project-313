@@ -35,7 +35,7 @@ RUN uv sync
 
 #exec uv run gunicorn --bind 0.0.0.0:8080 main:app
 #EOF
-RUN chmod +x /start.sh
+RUN chmod +x ./start.sh
 
 # Открываем порт, который слушает Nginx (80)
 EXPOSE 80
