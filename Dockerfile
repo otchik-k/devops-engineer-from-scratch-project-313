@@ -22,20 +22,21 @@ COPY ./application/. /app
 COPY . /app
 COPY ./services/project-devops-deploy-crud-frontend/dist/. /app/publ
 COPY ./services/nginx.conf /etc/nginx
+COPY ./start.sh /
 
 RUN uv sync
 
-RUN cat > /start.sh << 'EOF'
+#RUN cat > /start.sh << 'EOF'
 #!/usr/bin/env bash
-set -e
+#set -e
 
-nginx
+#nginx
 
 #cd /app/application
 
-exec uv run gunicorn --bind 0.0.0.0:8080 main:app
-EOF
-RUN chmod +x /start.sh
+#exec uv run gunicorn --bind 0.0.0.0:8080 main:app
+#EOF
+#RUN chmod +x /start.sh
 
 # Открываем порт, который слушает Nginx (80)
 EXPOSE 80
