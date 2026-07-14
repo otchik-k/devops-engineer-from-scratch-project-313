@@ -10,10 +10,13 @@ RUN --mount=type=cache,target=/root/.cache/pip \
 
 RUN apk update && apk add nginx
 RUN apk add --no-cache bash
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    build-essential \
-    libpq-dev \
-    && rm -rf /var/lib/apt/lists/*n
+#RUN apt-get update && apt-get install -y --no-install-recommends \
+#    build-essential \
+#    libpq-dev \
+#    && rm -rf /var/lib/apt/lists/*n
+RUN apk add --no-cache \
+    build-base \
+    postgresql-dev
 
 COPY ./application/. /app
 COPY . /app
