@@ -4,8 +4,8 @@ WORKDIR /app
 
 COPY requirements.txt /app
 
-#RUN pip3 install --no-cache-dir uv
-RUN --mount=type=cache,target=/root/.cache/pip \
+RUN pip3 install --no-cache-dir uv
+#RUN --mount=type=cache,target=/root/.cache/pip \
     pip3 install -r requirements.txt
 
 RUN apk update && apk add nginx
@@ -25,16 +25,16 @@ COPY ./services/nginx.conf /etc/nginx
 
 RUN uv sync
 
-RUN cat > /start.sh << 'EOF'
+#RUN cat > /start.sh << 'EOF'
 #!/usr/bin/env bash
-set -e
+#set -e
 
-nginx
+#nginx
 
 #cd /app/application
 
-exec uv run gunicorn --bind 0.0.0.0:8080 main:app
-EOF
+#exec uv run gunicorn --bind 0.0.0.0:8080 main:app
+#EOF
 RUN chmod +x /start.sh
 
 # Открываем порт, который слушает Nginx (80)
